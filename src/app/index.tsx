@@ -1,31 +1,85 @@
-import { StatusBar } from "expo-status-bar";
-import { Text, View } from "react-native";
+import {Text, View} from "react-native"
+
+import {StatusBar} from "expo-status-bar"
+
+import {Container} from "@/components/Container"
 
 export default function App() {
   return (
-    <View className="flex-1 bg-white dark:bg-black items-center justify-center px-8">
-      {/* Heading */}
-      <Text className="text-4xl font-extrabold text-gray-800 dark:text-white mb-3 tracking-tight">
-        🚀 Welcome
-      </Text>
-
-      {/* Subheading */}
-      <Text className="text-xl dark:text-white text-gray-700 mb-8 text-center leading-relaxed">
-        Build beautiful apps with{" "}
-        <Text className="text-blue-500 font-semibold">
-          Expo (Router) + Uniwind 🔥
+    <Container expanded insetBottom className="gap-lg justify-center">
+      <View className="gap-sm">
+        <Text className="text-foreground text-3xl font-bold">Brand colors</Text>
+        <Text className="text-muted-foreground text-base leading-6">
+          Coinbase-style brand blue, deep trust navy, and market amber.
         </Text>
-      </Text>
+      </View>
 
-      {/* Instruction text */}
-      <Text className="text-base text-gray-600 dark:text-white text-center max-w-sm">
-        Start customizing your app by editing{" "}
-        <Text className="font-semibold text-gray-800 dark:text-white">
-          app/index.tsx
+      <View className="gap-md border-border bg-card p-lg rounded-xl border">
+        <View className="gap-xs bg-primary px-md py-sm rounded-lg">
+          <Text className="text-primary-foreground text-center text-base font-semibold">
+            Primary brand
+          </Text>
+          <Text className="text-primary-foreground text-center text-sm">
+            #0052FF
+          </Text>
+        </View>
+
+        <View className="gap-xs bg-secondary px-md py-sm rounded-lg">
+          <Text className="text-secondary-foreground text-center text-base font-semibold">
+            Secondary trust
+          </Text>
+          <Text className="text-secondary-foreground text-center text-sm">
+            #1E3A8A
+          </Text>
+        </View>
+
+        <View className="gap-xs bg-accent px-md py-sm rounded-lg">
+          <Text className="text-accent-foreground text-center text-base font-semibold">
+            Market accent
+          </Text>
+          <Text className="text-accent-foreground text-center text-sm">
+            #F3BA2F
+          </Text>
+        </View>
+      </View>
+
+      <View className="gap-sm bg-muted p-lg rounded-xl">
+        <Text className="text-foreground text-sm font-semibold">
+          Market states
         </Text>
-      </Text>
 
-      <StatusBar style="dark" />
-    </View>
-  );
+        <View className="flex-row justify-between">
+          <Text className="text-muted-foreground text-sm">ALUA</Text>
+          <Text className="text-profit text-sm font-semibold">+4.82%</Text>
+        </View>
+
+        <View className="flex-row justify-between">
+          <Text className="text-muted-foreground text-sm">YPFD</Text>
+          <Text className="text-loss text-sm font-semibold">-1.37%</Text>
+        </View>
+      </View>
+
+      <View className="gap-sm flex-row">
+        <View className="bg-success p-md flex-1 rounded-lg">
+          <Text className="text-success-foreground text-center text-sm font-semibold">
+            FILLED
+          </Text>
+        </View>
+
+        <View className="bg-warning p-md flex-1 rounded-lg">
+          <Text className="text-warning-foreground text-center text-sm font-semibold">
+            PENDING
+          </Text>
+        </View>
+
+        <View className="bg-destructive p-md flex-1 rounded-lg">
+          <Text className="text-destructive-foreground text-center text-sm font-semibold">
+            REJECTED
+          </Text>
+        </View>
+      </View>
+
+      <StatusBar style="auto" />
+    </Container>
+  )
 }

@@ -5,9 +5,13 @@ node_modules/
 
 # Expo
 .expo/
+.expo-compiler-check/
 dist/
 web-build/
 expo-env.d.ts
+
+/ios
+/android
 
 # Native
 *.orig.*
@@ -28,6 +32,10 @@ yarn-error.*
 # macOS
 .DS_Store
 *.pem
+
+# Python
+__pycache__/
+*.py[cod]
 
 # local env files
 .env*.local

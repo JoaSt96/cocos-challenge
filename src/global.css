@@ -1,2 +1,149 @@
 @import "tailwindcss";
 @import "uniwind";
+
+@theme static {
+  --color-background: #fafbf7;
+  --color-foreground: #111827;
+  --color-card: #ffffff;
+  --color-card-foreground: #111827;
+  --color-popover: #ffffff;
+  --color-popover-foreground: #111827;
+  --color-muted: #eef2f3;
+  --color-muted-foreground: #475569;
+  --color-border: #cbd5e1;
+  --color-input: #cbd5e1;
+  --color-ring: #0052ff;
+
+  --color-primary: #0052ff;
+  --color-primary-foreground: #ffffff;
+  --color-secondary: #1e3a8a;
+  --color-secondary-foreground: #ffffff;
+  --color-accent: #f3ba2f;
+  --color-accent-foreground: #1e1600;
+
+  --color-destructive: #dc2626;
+  --color-destructive-foreground: #ffffff;
+  --color-success: #007a4d;
+  --color-success-foreground: #ffffff;
+  --color-warning: #d97706;
+  --color-warning-foreground: #1e1600;
+  --color-info: #1e3a8a;
+  --color-info-foreground: #ffffff;
+  --color-profit: #047857;
+  --color-loss: #b91c1c;
+
+  --color-basic-lighter: #e2e8f0;
+  --color-foreground-disabled: #64748b;
+
+  --color-chart-1: #0052ff;
+  --color-chart-2: #1e3a8a;
+  --color-chart-3: #f3ba2f;
+  --color-chart-4: #00875a;
+  --color-chart-5: #dc2626;
+
+  --spacing-none: 0px;
+  --spacing-xs: 4px;
+  --spacing-sm: 8px;
+  --spacing-md: 12px;
+  --spacing-lg: 16px;
+  --spacing-xl: 20px;
+  --spacing-2xl: 24px;
+  --spacing-3xl: 32px;
+  --spacing-4xl: 40px;
+  --spacing-5xl: 48px;
+  --spacing-6xl: 64px;
+  --spacing-7xl: 80px;
+  --spacing-street: 16px;
+  --spacing-sheet: 12px;
+
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --radius-xl: 16px;
+}
+
+@layer theme {
+  :root {
+    @variant light {
+      --color-background: #fafbf7;
+      --color-foreground: #111827;
+      --color-card: #ffffff;
+      --color-card-foreground: #111827;
+      --color-popover: #ffffff;
+      --color-popover-foreground: #111827;
+      --color-muted: #eef2f3;
+      --color-muted-foreground: #475569;
+      --color-border: #cbd5e1;
+      --color-input: #cbd5e1;
+      --color-ring: #0052ff;
+
+      --color-primary: #0052ff;
+      --color-primary-foreground: #ffffff;
+      --color-secondary: #1e3a8a;
+      --color-secondary-foreground: #ffffff;
+      --color-accent: #f3ba2f;
+      --color-accent-foreground: #1e1600;
+
+      --color-destructive: #dc2626;
+      --color-destructive-foreground: #ffffff;
+      --color-success: #007a4d;
+      --color-success-foreground: #ffffff;
+      --color-warning: #d97706;
+      --color-warning-foreground: #1e1600;
+      --color-info: #1e3a8a;
+      --color-info-foreground: #ffffff;
+      --color-profit: #047857;
+      --color-loss: #b91c1c;
+
+      --color-basic-lighter: #e2e8f0;
+      --color-foreground-disabled: #64748b;
+
+      --color-chart-1: #0052ff;
+      --color-chart-2: #1e3a8a;
+      --color-chart-3: #f3ba2f;
+      --color-chart-4: #00875a;
+      --color-chart-5: #dc2626;
+    }
+
+    @variant dark {
+      --color-background: #080b0a;
+      --color-foreground: #f5f7fa;
+      --color-card: #111611;
+      --color-card-foreground: #f5f7fa;
+      --color-popover: #111611;
+      --color-popover-foreground: #f5f7fa;
+      --color-muted: #1b211f;
+      --color-muted-foreground: #a7b1b8;
+      --color-border: #26312d;
+      --color-input: #26312d;
+      --color-ring: #60a5fa;
+
+      --color-primary: #3b82f6;
+      --color-primary-foreground: #ffffff;
+      --color-secondary: #60a5fa;
+      --color-secondary-foreground: #0b1220;
+      --color-accent: #f6c75b;
+      --color-accent-foreground: #1e1600;
+
+      --color-destructive: #f87171;
+      --color-destructive-foreground: #2a0606;
+      --color-success: #38d996;
+      --color-success-foreground: #04120c;
+      --color-warning: #fbbf24;
+      --color-warning-foreground: #1e1600;
+      --color-info: #60a5fa;
+      --color-info-foreground: #0b1220;
+      --color-profit: #34d399;
+      --color-loss: #f87171;
+
+      --color-basic-lighter: #26312d;
+      --color-foreground-disabled: #64748b;
+
+      --color-chart-1: #3b82f6;
+      --color-chart-2: #60a5fa;
+      --color-chart-3: #f6c75b;
+      --color-chart-4: #2dd48f;
+      --color-chart-5: #f87171;
+    }
+  }
+}
