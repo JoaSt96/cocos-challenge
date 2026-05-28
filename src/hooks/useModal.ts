@@ -2,10 +2,23 @@ import {type ComponentType} from "react"
 
 import {useModalContext} from "@/components/modals/ModalContext"
 
-export const useModal = <T extends object>(
+type UseModalPropsFactory<T extends object> = (
+  dismiss: () => Promise<void>
+) => T
+
+export function useModal<T extends object>(
+  Component: ComponentType<T>
+): (overrideProps: T) => void
+
+export function useModal<T extends object>(
   Component: ComponentType<T>,
-  propsOrFactory?: ((dismiss: () => Promise<void>) => T) | Partial<T>
-) => {
+  propsOrFactory: UseModalPropsFactory<T> | Partial<T>
+): (overrideProps?: Partial<T>) => void
+
+export function useModal<T extends object>(
+  Component: ComponentType<T>,
+  propsOrFactory?: UseModalPropsFactory<T> | Partial<T>
+) {
   const {showModal} = useModalContext()
 
   return (overrideProps?: Partial<T>) => {
