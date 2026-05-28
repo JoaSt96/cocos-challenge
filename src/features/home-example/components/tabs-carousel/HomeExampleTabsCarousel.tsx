@@ -17,7 +17,7 @@ const LegendList = cssInterop(LegendListBase<TabType>, {
   ListFooterComponentClassName: "ListFooterComponentStyle",
 })
 
-export const HomeTabsCarousel = () => {
+export const HomeExampleTabsCarousel = () => {
   const legendListRef = useRef<LegendListRef>(null)
 
   const [tab, setTab] = useTabStore(

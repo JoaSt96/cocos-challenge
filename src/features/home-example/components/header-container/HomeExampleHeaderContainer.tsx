@@ -9,11 +9,11 @@ import {usePrefetchImages} from "@/hooks/usePrefetchImages"
 
 import {useBannersQuery} from "../../hooks/useBannersQuery"
 import {useFeaturedItemsQuery} from "../../hooks/useFeaturedItemsQuery"
-import {HomeBannersCarousel} from "../banners-carousel/HomeBannersCarousel"
-import {HomeRecentlyViewedItemsCarousel} from "../recently-viewed-carousel/HomeRecentlyViewedItemsCarousel"
-import {HomeTabsCarousel} from "../tabs-carousel/HomeTabsCarousel"
+import {HomeExampleBannersCarousel} from "../banners-carousel/HomeExampleBannersCarousel"
+import {HomeExampleRecentlyViewedItemsCarousel} from "../recently-viewed-carousel/HomeExampleRecentlyViewedItemsCarousel"
+import {HomeExampleTabsCarousel} from "../tabs-carousel/HomeExampleTabsCarousel"
 
-export const HomeHeaderContainer: FC = () => {
+export const HomeExampleHeaderContainer: FC = () => {
   const bannersQuery = useBannersQuery()
   const featuredItemsQuery = useFeaturedItemsQuery()
 
@@ -32,10 +32,12 @@ export const HomeHeaderContainer: FC = () => {
   return (
     <Column gap="l">
       <Skeleton show={!isImagesLoaded || !bannersQuery.isSuccess}>
-        <HomeBannersCarousel banners={bannersQuery.data?.carousel ?? []} />
+        <HomeExampleBannersCarousel
+          banners={bannersQuery.data?.carousel ?? []}
+        />
       </Skeleton>
       <Skeleton show={!featuredItemsQuery.isSuccess}>
-        <HomeRecentlyViewedItemsCarousel
+        <HomeExampleRecentlyViewedItemsCarousel
           items={featuredItemsQuery.data?.items ?? []}
         />
       </Skeleton>
@@ -63,7 +65,7 @@ export const HomeHeaderContainer: FC = () => {
         </Column>
       </Container>
 
-      <HomeTabsCarousel />
+      <HomeExampleTabsCarousel />
     </Column>
   )
 }

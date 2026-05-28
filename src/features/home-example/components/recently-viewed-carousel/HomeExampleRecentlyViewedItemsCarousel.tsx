@@ -8,7 +8,7 @@ import {Container} from "@/components/Container"
 import {Column} from "@/components/ui/Column"
 import {Text} from "@/components/ui/Text"
 
-import {MinifiedItemCard} from "./MinifiedItemCard"
+import {HomeExampleMinifiedItemCard} from "./HomeExampleMinifiedItemCard"
 
 type Props = {
   items: Item[]
@@ -25,13 +25,13 @@ const contentContainerVariants = cva("", {
   },
 })
 
-export const HomeRecentlyViewedItemsCarousel: FC<Props> = ({items}) => {
+export const HomeExampleRecentlyViewedItemsCarousel: FC<Props> = ({items}) => {
   const renderItem = ({item, index}: {item: Item; index: number}) => {
     const isFirstItem = index === 0
     const isLastItem = index === items.length - 1
 
     return (
-      <MinifiedItemCard
+      <HomeExampleMinifiedItemCard
         key={item.id}
         price={item.price}
         previousPrice={item.price}

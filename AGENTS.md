@@ -10,14 +10,14 @@ mutation, hook, screen, and feature-local helper.
 ## Feature structure
 
 - Put every new feature under `src/features/<feature-name>/`.
-- Use the `src/features/home/` folder as the structural reference.
+- Use the `src/features/home-example/` folder as the structural reference.
 - Add these folders only when the feature needs them:
   - `api/` for raw HTTP calls.
   - `queries/` for TanStack Query keys and query option factories.
   - `hooks/` for UI-facing query and mutation hooks.
   - `components/` for feature-specific screens, containers, and proxy components.
   - feature-local helpers/types when they are not shared across features.
-- Before copying any pattern from `src/features/home/`, verify imports and
+- Before copying any pattern from `src/features/home-example/`, verify imports and
   package availability against the live repo. Some files in that folder may
   reference packages or components that are not installed in this project.
 
@@ -59,9 +59,13 @@ mutation, hook, screen, and feature-local helper.
 
 - Feature UI must wrap shared design-system components from `src/components/`
   behind feature-named abstractions.
-- Use domain names such as `PortfolioAssetRow`, `InstrumentPriceCell`, or
-  `OrderTypeSelector` instead of exposing generic design-system composition
-  throughout a screen.
+- Every feature component file and exported component name must start with the
+  feature prefix in PascalCase. Derive the prefix from the feature folder name:
+  `markets` -> `Markets`, `orders` -> `Orders`, `trading-home` ->
+  `TradingHome`.
+- Use domain names such as `MarketsInstrumentRow`,
+  `MarketsInstrumentPriceCell`, `PortfolioAssetRow`, or `OrdersTypeSelector`
+  instead of exposing generic design-system composition throughout a screen.
 - Screens should not repeatedly assemble primitives like `Row`, `Column`,
   `Text`, and `Money` for repeated domain UI when a feature-named proxy
   component can express the intent.
@@ -84,3 +88,13 @@ mutation, hook, screen, and feature-local helper.
   format code the same way.
 - Use `bun run format` for full-repo formatting and `bun run format:check` for
   a full-repo formatting check.
+
+## UI verification
+
+- Use the Argent MCP workflow for native UI verification of this Expo app.
+- Prefer Argent device discovery tools (`describe`, `debugger-component-tree`,
+  and `screenshot`) before interacting with the app.
+- Do not use Playwright MCP as the primary UI verification path for native app
+  flows in this project.
+- Keep Metro on port `8081` for Argent verification unless the user explicitly
+  requests another port.

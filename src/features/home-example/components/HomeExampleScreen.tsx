@@ -26,7 +26,7 @@ import {ItemCard} from "@/components/ui/item-card/ItemCard"
 import {Text} from "@/components/ui/Text"
 import {useRefreshing} from "@/hooks/useRefreshing"
 
-import {HomeHeaderContainer} from "./header-container/HomeHeaderContainer"
+import {HomeExampleHeaderContainer} from "./header-container/HomeExampleHeaderContainer"
 
 import {useItemsByTabIdQuery} from "../hooks/useItemsByTabIdQuery"
 import {useTabStore} from "../store/useTabStore"
@@ -48,7 +48,7 @@ function updateScrollTopButtonVisibility(
   }
 }
 
-export const HomeScreen = () => {
+export const HomeExampleScreen = () => {
   const ref = useRef<LegendListRef>(null)
 
   const tab = useTabStore(state => state.tab)
@@ -138,7 +138,7 @@ export const HomeScreen = () => {
         drawDistance={700}
         nestedScrollEnabled={true}
         showsVerticalScrollIndicator={false}
-        ListHeaderComponent={HomeHeaderContainer}
+        ListHeaderComponent={HomeExampleHeaderContainer}
         ListHeaderComponentClassName="pb-sm"
         ListFooterComponent={ListFooter}
         columnWrapperClassName="gap-md"

@@ -145,8 +145,9 @@ export const OrdersTicketSheet = ({instrument}: OrdersTicketSheetProps) => {
     <BottomSheetScrollView
       keyboardShouldPersistTaps="handled"
       showsVerticalScrollIndicator={false}
+      contentContainerClassName="pb-safe"
     >
-      <View className="gap-lg pt-md pb-safe">
+      <View className="gap-lg pt-md">
         <View className="gap-xs">
           <Text className="text-foreground text-xl font-semibold">
             Ticket de orden

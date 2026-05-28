@@ -1,7 +1,7 @@
 import React, {type FC} from "react"
 
-import {Image} from "expo-image"
 import {cva} from "class-variance-authority"
+import {Image} from "expo-image"
 
 import {Money} from "@/components/Money"
 import {Column} from "@/components/ui/Column"
@@ -23,7 +23,7 @@ const minifiedItemCardImageVariants = cva(
   "h-[120px] w-full self-center rounded-md flex-2"
 )
 
-export const MinifiedItemCard: FC<Props> = ({
+export const HomeExampleMinifiedItemCard: FC<Props> = ({
   price,
   image,
   previousPrice,

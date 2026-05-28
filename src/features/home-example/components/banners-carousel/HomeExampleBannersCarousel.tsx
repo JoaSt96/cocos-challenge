@@ -14,7 +14,7 @@ type Props = {
   banners: HomeBanner[]
 }
 
-export const HomeBannersCarousel: FC<Props> = ({banners}) => {
+export const HomeExampleBannersCarousel: FC<Props> = ({banners}) => {
   const progress = useSharedValue(0)
 
   useEffect(() => {
