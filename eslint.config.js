@@ -8,7 +8,15 @@ const eslintPluginPrettierRecommended = require("eslint-plugin-prettier/recommen
 const pluginReactNative = require("eslint-plugin-react-native")
 
 module.exports = defineConfig([
-  globalIgnores([ "dist/*", "babel.config.js", "metro.config.js" ]),
+  globalIgnores([
+    ".expo/*",
+    "dist/*",
+    "babel.config.js",
+    "metro.config.js",
+    "expo-env.d.ts",
+    "**/*.test.ts",
+    "src/features/home-example/**",
+  ]),
   expoConfig,
   eslintPluginPrettierRecommended,
   importPlugin.flatConfigs.recommended,

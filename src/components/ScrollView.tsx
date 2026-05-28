@@ -1,10 +1,10 @@
 import {type ComponentRef, forwardRef} from "react"
 
+import {cva, type VariantProps} from "class-variance-authority"
 import {
   KeyboardAwareScrollView,
   type KeyboardAwareScrollViewProps,
 } from "react-native-keyboard-controller"
-import {cva, type VariantProps} from "class-variance-authority"
 
 import {useDynamicScrollView} from "@/hooks/useDynamicScroll"
 import {cn} from "@/lib/utils"
