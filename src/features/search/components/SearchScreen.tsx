@@ -1,7 +1,10 @@
 import {useEffect, useState} from "react"
-import {Alert as NativeAlert} from "react-native"
 
 import {StatusBar} from "expo-status-bar"
+
+import {OrdersTicketSheet} from "@/features/orders/components/OrdersTicketSheet"
+import {toOrdersInstrument} from "@/features/orders/orderValidation"
+import {useModal} from "@/hooks/useModal"
 
 import {SearchResultsView} from "./SearchResultsView"
 
@@ -65,6 +68,7 @@ export const SearchScreen = () => {
 
   const resultsQuery = useSearchResultsQuery(debouncedQuery)
   const results = resultsQuery.data ?? []
+  const showOrdersTicket = useModal(OrdersTicketSheet)
   const state = getSearchQueryState({
     debouncedQuery,
     isError: resultsQuery.isError,
@@ -77,10 +81,9 @@ export const SearchScreen = () => {
   }
 
   const handleResultPress = (result: SearchResult) => {
-    NativeAlert.alert(
-      result.ticker,
-      "El ticket de orden se implementa en la feature Orders."
-    )
+    showOrdersTicket({
+      instrument: toOrdersInstrument(result),
+    })
   }
 
   return (
