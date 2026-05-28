@@ -1,4 +1,4 @@
-import {beforeAll, beforeEach, describe, expect, it, mock} from "bun:test"
+const {beforeAll, beforeEach, describe, expect, it, mock} = require("bun:test")
 
 const post = mock(async () => ({
   data: {
@@ -17,7 +17,7 @@ let createOrder
 
 describe("orders api", () => {
   beforeAll(async () => {
-    createOrder = (await import("./api/orders.api")).createOrder
+    createOrder = require("./api/orders.api").createOrder
   })
 
   beforeEach(() => {

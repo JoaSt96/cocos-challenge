@@ -1,10 +1,7 @@
 {
   "prettier.ignorePath": ".prettierignore",
   "editor.formatOnSave": true,
-  "tailwindCSS.classFunctions": [
-    "cva",
-    "cx"
-  ],
+  "tailwindCSS.classFunctions": ["cva", "cx"],
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "[typescript]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -22,8 +19,6 @@
     "typescriptreact"
   ],
   "eslint.options": {
-    "ignorePatterns": [
-      "eslint.config.js"
-    ]
+    "ignorePatterns": ["eslint.config.js"]
   }
 }
