@@ -4,13 +4,25 @@ import {api} from "@/config/api.config"
 
 import type {CreateOrderPayload, CreateOrderResponse} from "../types"
 
-const createOrderPayloadSchema = z.object({
-  instrument_id: z.number(),
-  price: z.number().optional(),
+const createOrderBasePayloadSchema = z.object({
+  instrument_id: z.number().int().positive(),
   quantity: z.number().int().positive(),
   side: z.enum(["BUY", "SELL"]),
-  type: z.enum(["MARKET", "LIMIT"]),
 })
+
+const createOrderPayloadSchema = z.discriminatedUnion("type", [
+  createOrderBasePayloadSchema
+    .extend({
+      type: z.literal("MARKET"),
+    })
+    .strict(),
+  createOrderBasePayloadSchema
+    .extend({
+      price: z.number().positive(),
+      type: z.literal("LIMIT"),
+    })
+    .strict(),
+])
 
 const createOrderResponseSchema = z.object({
   id: z.union([z.string(), z.number()]),
