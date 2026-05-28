@@ -1,3 +1,4 @@
+// @ts-expect-error This repo runs tests with Bun, but Bun test types are not configured for app compilation.
 import {describe, expect, it} from "bun:test"
 
 import {normalizeSearchQuery, sortSearchResultsByTicker} from "./searchText"
@@ -16,11 +17,11 @@ describe("searchText", () => {
   it("sorts results by ticker", () => {
     const results: SearchResult[] = [
       {
-        closePrice: 71.67,
-        id: 22,
-        lastPrice: 79.36,
-        name: "Banco Frances",
-        ticker: "BBAR",
+        closePrice: 24.44,
+        id: 16,
+        lastPrice: 27.12,
+        name: "Garovaglio Y Zorraquin",
+        ticker: "GARO",
         type: "ACCIONES",
       },
       {
@@ -32,11 +33,11 @@ describe("searchText", () => {
         type: "ACCIONES",
       },
       {
-        closePrice: 24.44,
-        id: 16,
-        lastPrice: 27.12,
-        name: "Garovaglio Y Zorraquin",
-        ticker: "GARO",
+        closePrice: 71.67,
+        id: 22,
+        lastPrice: 79.36,
+        name: "Banco Frances",
+        ticker: "BBAR",
         type: "ACCIONES",
       },
     ]
@@ -44,5 +45,10 @@ describe("searchText", () => {
     expect(
       sortSearchResultsByTicker(results).map(result => result.ticker)
     ).toEqual(["BBAR", "DYCA", "GARO"])
+    expect(results.map(result => result.ticker)).toEqual([
+      "GARO",
+      "DYCA",
+      "BBAR",
+    ])
   })
 })
