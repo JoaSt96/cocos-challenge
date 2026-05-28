@@ -1,14 +1,14 @@
 import React, {Fragment} from "react"
 
-import {SystemBars, type SystemBarStyle} from "react-native-edge-to-edge"
+import {StatusBar, type StatusBarStyle} from "expo-status-bar"
 
+import {Container, type ContainerProps} from "./Container"
 import {ScrollView, type ScrollViewProps} from "./ScrollView"
-import {Container, type ContainerProps} from "./ui/Container"
 
 export type ScreenProps = {
   container?: boolean
   containerProps?: ContainerProps
-  systemBarsStyle?: SystemBarStyle
+  systemBarsStyle?: StatusBarStyle
 } & ScrollViewProps
 
 export const Screen = ({
@@ -20,7 +20,7 @@ export const Screen = ({
 }: ScreenProps) => {
   return (
     <ScrollView {...props}>
-      <SystemBars style={systemBarsStyle} />
+      <StatusBar style={systemBarsStyle} />
       {container ? (
         <Container expanded {...containerProps}>
           {children}
