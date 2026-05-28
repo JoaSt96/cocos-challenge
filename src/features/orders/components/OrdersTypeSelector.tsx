@@ -7,12 +7,13 @@ import {Text} from "@/components/ui/text"
 import type {OrderType} from "../types"
 
 type OrdersTypeSelectorProps = {
+  disabled?: boolean
   value: OrderType
   onChange: (value: OrderType) => void
 }
 
 const ordersTypeSegmentVariants = cva(
-  "min-h-10 flex-1 items-center justify-center rounded-sm px-md",
+  "min-h-11 flex-1 items-center justify-center rounded-sm px-md",
   {
     variants: {
       selected: {
@@ -44,6 +45,7 @@ const ORDER_TYPE_OPTIONS: {label: string; value: OrderType}[] = [
 ]
 
 export const OrdersTypeSelector = ({
+  disabled = false,
   onChange,
   value,
 }: OrdersTypeSelectorProps) => {
@@ -57,8 +59,9 @@ export const OrdersTypeSelector = ({
           return (
             <Pressable
               accessibilityRole="button"
-              accessibilityState={{selected}}
+              accessibilityState={{disabled, selected}}
               className={ordersTypeSegmentVariants({selected})}
+              disabled={disabled}
               key={option.value}
               onPress={() => onChange(option.value)}
             >

@@ -6,6 +6,7 @@ import {Text} from "@/components/ui/text"
 import {OrdersFieldError} from "./OrdersFieldError"
 
 type OrdersNumberInputProps = {
+  disabled?: boolean
   error?: string
   label: string
   onChangeText: (value: string) => void
@@ -14,6 +15,7 @@ type OrdersNumberInputProps = {
 }
 
 export const OrdersNumberInput = ({
+  disabled = false,
   error,
   label,
   onChangeText,
@@ -25,6 +27,7 @@ export const OrdersNumberInput = ({
       <Text className="text-muted-foreground text-sm font-medium">{label}</Text>
       <Input
         accessibilityLabel={label}
+        editable={!disabled}
         keyboardType="decimal-pad"
         onChangeText={onChangeText}
         placeholder={placeholder}

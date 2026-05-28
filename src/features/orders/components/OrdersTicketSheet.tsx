@@ -1,9 +1,8 @@
-import {useMemo, useState} from "react"
+import {useMemo, useRef, useState} from "react"
 import {View} from "react-native"
 
 import {BottomSheetScrollView} from "@gorhom/bottom-sheet"
 
-import {BottomSheetContainer} from "@/components/modals"
 import {Text} from "@/components/ui/text"
 
 import {OrdersInstrumentSummary} from "./OrdersInstrumentSummary"
@@ -70,7 +69,10 @@ export const OrdersTicketSheet = ({instrument}: OrdersTicketSheetProps) => {
   )
   const [fieldErrors, setFieldErrors] = useState<OrdersFieldErrors>({})
   const [result, setResult] = useState<CreateOrderResponse | null>(null)
+  const [isSubmitLocked, setIsSubmitLocked] = useState(false)
+  const submitLockedRef = useRef(false)
   const createOrderMutation = useCreateOrderMutation()
+  const isSubmitting = isSubmitLocked || createOrderMutation.isPending
 
   const computedQuantity = useMemo(
     () => getOrdersComputedQuantity({formState, instrument}),
@@ -82,7 +84,21 @@ export const OrdersTicketSheet = ({instrument}: OrdersTicketSheetProps) => {
     instrument,
   })
 
+  const lockSubmission = () => {
+    submitLockedRef.current = true
+    setIsSubmitLocked(true)
+  }
+
+  const releaseSubmission = () => {
+    submitLockedRef.current = false
+    setIsSubmitLocked(false)
+  }
+
   const updateFormState = (patch: Partial<OrdersFormState>) => {
+    if (submitLockedRef.current || createOrderMutation.isPending) {
+      return
+    }
+
     createOrderMutation.reset()
     setResult(null)
     setFieldErrors({})
@@ -92,7 +108,22 @@ export const OrdersTicketSheet = ({instrument}: OrdersTicketSheetProps) => {
     }))
   }
 
+  const handleReset = () => {
+    if (submitLockedRef.current || createOrderMutation.isPending) {
+      return
+    }
+
+    createOrderMutation.reset()
+    setFieldErrors({})
+    setResult(null)
+    setFormState(DEFAULT_ORDERS_FORM_STATE)
+  }
+
   const handleSubmit = () => {
+    if (submitLockedRef.current || createOrderMutation.isPending) {
+      return
+    }
+
     const nextPayload = buildCreateOrderPayload({formState, instrument})
     setResult(null)
     setFieldErrors(nextPayload.fieldErrors)
@@ -101,7 +132,9 @@ export const OrdersTicketSheet = ({instrument}: OrdersTicketSheetProps) => {
       return
     }
 
+    lockSubmission()
     createOrderMutation.mutate(nextPayload.payload, {
+      onSettled: releaseSubmission,
       onSuccess: response => {
         setResult(response)
       },
@@ -109,106 +142,107 @@ export const OrdersTicketSheet = ({instrument}: OrdersTicketSheetProps) => {
   }
 
   return (
-    <BottomSheetContainer expanded insetBottom className="pt-md">
-      <BottomSheetScrollView
-        keyboardShouldPersistTaps="handled"
-        showsVerticalScrollIndicator={false}
-      >
-        <View className="gap-lg pb-safe">
-          <View className="gap-xs">
-            <Text className="text-foreground text-xl font-semibold">
-              Ticket de orden
-            </Text>
-            <Text
-              selectable
-              className="text-muted-foreground text-sm leading-5"
-            >
-              Definí la operación y enviá la orden al mercado.
-            </Text>
-          </View>
-
-          <OrdersInstrumentSummary instrument={instrument} />
-
-          <OrdersSideSelector
-            onChange={side => updateFormState({side})}
-            value={formState.side}
-          />
-
-          <OrdersTypeSelector
-            onChange={type =>
-              updateFormState({
-                limitPriceText:
-                  type === "MARKET" ? "" : formState.limitPriceText,
-                type,
-              })
-            }
-            value={formState.type}
-          />
-
-          <OrdersQuantityModeSelector
-            onChange={quantityMode => updateFormState({quantityMode})}
-            value={formState.quantityMode}
-          />
-
-          {formState.quantityMode === "SHARES" ? (
-            <OrdersNumberInput
-              error={fieldErrors.quantityText}
-              label="Cantidad de acciones"
-              onChangeText={quantityText => updateFormState({quantityText})}
-              placeholder="123"
-              value={formState.quantityText}
-            />
-          ) : (
-            <OrdersNumberInput
-              error={fieldErrors.amountText}
-              label="Monto en pesos"
-              onChangeText={amountText => updateFormState({amountText})}
-              placeholder="10000"
-              value={formState.amountText}
-            />
-          )}
-
-          {formState.type === "LIMIT" ? (
-            <OrdersNumberInput
-              error={fieldErrors.limitPriceText}
-              label="Precio límite"
-              onChangeText={limitPriceText => updateFormState({limitPriceText})}
-              placeholder="84,50"
-              value={formState.limitPriceText}
-            />
-          ) : null}
-
-          <View className="border-border bg-card gap-xs p-lg rounded-lg border">
-            <Text className="text-muted-foreground text-sm">
-              Acciones a enviar
-            </Text>
-            <Text selectable className="text-foreground text-lg font-semibold">
-              {formatOrdersQuantity(computedQuantity)}
-            </Text>
-            {estimatedTotal ? (
-              <Text selectable className="text-muted-foreground text-sm">
-                Estimado {formatOrdersPeso(estimatedTotal)}
-              </Text>
-            ) : null}
-          </View>
-
-          <OrdersStatusResult
-            errorMessage={
-              createOrderMutation.isError
-                ? getOrdersMutationErrorMessage(createOrderMutation.error)
-                : null
-            }
-            result={result}
-          />
-
-          <OrdersSubmitButton
-            disabled={createOrderMutation.isPending}
-            hasResult={Boolean(result)}
-            isPending={createOrderMutation.isPending}
-            onPress={handleSubmit}
-          />
+    <BottomSheetScrollView
+      keyboardShouldPersistTaps="handled"
+      showsVerticalScrollIndicator={false}
+    >
+      <View className="gap-lg pt-md pb-safe">
+        <View className="gap-xs">
+          <Text className="text-foreground text-xl font-semibold">
+            Ticket de orden
+          </Text>
+          <Text selectable className="text-muted-foreground text-sm leading-5">
+            Definí la operación y enviá la orden al mercado.
+          </Text>
         </View>
-      </BottomSheetScrollView>
-    </BottomSheetContainer>
+
+        <OrdersInstrumentSummary instrument={instrument} />
+
+        <OrdersSideSelector
+          disabled={isSubmitting}
+          onChange={side => updateFormState({side})}
+          value={formState.side}
+        />
+
+        <OrdersTypeSelector
+          disabled={isSubmitting}
+          onChange={type =>
+            updateFormState({
+              limitPriceText: type === "MARKET" ? "" : formState.limitPriceText,
+              type,
+            })
+          }
+          value={formState.type}
+        />
+
+        <OrdersQuantityModeSelector
+          disabled={isSubmitting}
+          onChange={quantityMode => updateFormState({quantityMode})}
+          value={formState.quantityMode}
+        />
+
+        {formState.quantityMode === "SHARES" ? (
+          <OrdersNumberInput
+            disabled={isSubmitting}
+            error={fieldErrors.quantityText}
+            label="Cantidad de acciones"
+            onChangeText={quantityText => updateFormState({quantityText})}
+            placeholder="123"
+            value={formState.quantityText}
+          />
+        ) : (
+          <OrdersNumberInput
+            disabled={isSubmitting}
+            error={fieldErrors.amountText}
+            label="Monto en pesos"
+            onChangeText={amountText => updateFormState({amountText})}
+            placeholder="10000"
+            value={formState.amountText}
+          />
+        )}
+
+        {formState.type === "LIMIT" ? (
+          <OrdersNumberInput
+            disabled={isSubmitting}
+            error={fieldErrors.limitPriceText}
+            label="Precio límite"
+            onChangeText={limitPriceText => updateFormState({limitPriceText})}
+            placeholder="84,50"
+            value={formState.limitPriceText}
+          />
+        ) : null}
+
+        <View className="border-border bg-card gap-xs p-lg rounded-lg border">
+          <Text className="text-muted-foreground text-sm">
+            Acciones a enviar
+          </Text>
+          <Text selectable className="text-foreground text-lg font-semibold">
+            {formatOrdersQuantity(computedQuantity)}
+          </Text>
+          {estimatedTotal ? (
+            <Text selectable className="text-muted-foreground text-sm">
+              Estimado {formatOrdersPeso(estimatedTotal)}
+            </Text>
+          ) : null}
+        </View>
+
+        <OrdersStatusResult
+          errorMessage={
+            createOrderMutation.isError
+              ? getOrdersMutationErrorMessage(createOrderMutation.error)
+              : null
+          }
+          result={result}
+        />
+
+        <OrdersSubmitButton
+          disabled={isSubmitting}
+          hasResult={Boolean(result)}
+          isPending={isSubmitting}
+          onPress={handleSubmit}
+          onReset={handleReset}
+        />
+      </View>
+    </BottomSheetScrollView>
   )
 }

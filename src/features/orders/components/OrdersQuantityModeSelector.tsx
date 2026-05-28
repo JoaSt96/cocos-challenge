@@ -7,12 +7,13 @@ import {Text} from "@/components/ui/text"
 import type {OrderQuantityMode} from "../types"
 
 type OrdersQuantityModeSelectorProps = {
+  disabled?: boolean
   value: OrderQuantityMode
   onChange: (value: OrderQuantityMode) => void
 }
 
 const ordersQuantityModeSegmentVariants = cva(
-  "min-h-10 flex-1 items-center justify-center rounded-sm px-md",
+  "min-h-11 flex-1 items-center justify-center rounded-sm px-md",
   {
     variants: {
       selected: {
@@ -47,6 +48,7 @@ const ORDER_QUANTITY_MODE_OPTIONS: {
 ]
 
 export const OrdersQuantityModeSelector = ({
+  disabled = false,
   onChange,
   value,
 }: OrdersQuantityModeSelectorProps) => {
@@ -62,8 +64,9 @@ export const OrdersQuantityModeSelector = ({
           return (
             <Pressable
               accessibilityRole="button"
-              accessibilityState={{selected}}
+              accessibilityState={{disabled, selected}}
               className={ordersQuantityModeSegmentVariants({selected})}
+              disabled={disabled}
               key={option.value}
               onPress={() => onChange(option.value)}
             >

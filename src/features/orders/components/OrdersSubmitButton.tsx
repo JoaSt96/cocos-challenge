@@ -6,6 +6,7 @@ type OrdersSubmitButtonProps = {
   isPending: boolean
   hasResult: boolean
   onPress: () => void
+  onReset: () => void
 }
 
 export const OrdersSubmitButton = ({
@@ -13,6 +14,7 @@ export const OrdersSubmitButton = ({
   hasResult,
   isPending,
   onPress,
+  onReset,
 }: OrdersSubmitButtonProps) => {
   const label = isPending
     ? "Enviando..."
@@ -25,7 +27,7 @@ export const OrdersSubmitButton = ({
       accessibilityRole="button"
       className="min-h-11"
       disabled={disabled}
-      onPress={onPress}
+      onPress={hasResult ? onReset : onPress}
     >
       <Text>{label}</Text>
     </Button>

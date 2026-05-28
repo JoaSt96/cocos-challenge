@@ -7,6 +7,7 @@ import {Text} from "@/components/ui/text"
 import type {OrderSide} from "../types"
 
 type OrdersSideSelectorProps = {
+  disabled?: boolean
   value: OrderSide
   onChange: (value: OrderSide) => void
 }
@@ -14,7 +15,7 @@ type OrdersSideSelectorProps = {
 type OrdersSideSegmentTone = "default" | "buy" | "sell"
 
 const ordersSideSegmentVariants = cva(
-  "min-h-10 flex-1 items-center justify-center rounded-sm px-md",
+  "min-h-11 flex-1 items-center justify-center rounded-sm px-md",
   {
     variants: {
       tone: {
@@ -58,6 +59,7 @@ const getOrdersSideSegmentTone = (
 }
 
 export const OrdersSideSelector = ({
+  disabled = false,
   onChange,
   value,
 }: OrdersSideSelectorProps) => {
@@ -72,8 +74,9 @@ export const OrdersSideSelector = ({
           return (
             <Pressable
               accessibilityRole="button"
-              accessibilityState={{selected}}
+              accessibilityState={{disabled, selected}}
               className={ordersSideSegmentVariants({tone})}
+              disabled={disabled}
               key={option.value}
               onPress={() => onChange(option.value)}
             >
