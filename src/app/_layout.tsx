@@ -1,5 +1,5 @@
 import {QueryClientProvider} from "@tanstack/react-query"
-import {Slot} from "expo-router"
+import {Stack} from "expo-router/stack"
 import {KeyboardProvider} from "react-native-keyboard-controller"
 
 import "../global.css"
@@ -10,7 +10,16 @@ export default function Layout() {
   return (
     <QueryClientProvider client={queryClient}>
       <KeyboardProvider>
-        <Slot />
+        <Stack
+          screenOptions={{
+            headerLargeTitle: false,
+            headerShadowVisible: false,
+          }}
+        >
+          <Stack.Screen name="index" options={{title: "Markets"}} />
+          <Stack.Screen name="portfolio" options={{title: "Portfolio"}} />
+          <Stack.Screen name="search" options={{title: "Search"}} />
+        </Stack>
       </KeyboardProvider>
     </QueryClientProvider>
   )
