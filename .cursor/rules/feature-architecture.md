@@ -18,14 +18,20 @@ https://docs.expo.dev/versions/v56.0.0/
 - Put every new feature under `src/features/<feature-name>/`.
 - Use `src/features/home/` as the structural reference.
 - Add `api/`, `queries/`, `hooks/`, and `components/` only when the feature
-  needs them.
+  needs them. Use `components/` for presentational components, non-route
+  containers, and feature-named proxy components.
 - Verify imports and package availability before copying from `src/features/home/`.
 
-## Screens and data
+## Routes and data
 
-- Route files in `src/app/` should render feature screens, not own feature
-  implementation details.
-- Feature screen/container components load TanStack Query hooks.
+- Route files in `src/app/` own screen/container composition for their route.
+- Route files may load TanStack Query hooks through feature `hooks/`, derive
+  route-local state, and wire navigation callbacks.
+- Do not create repo-owned components, files, or exports named `Screen` or
+  ending in `Screen`.
+- Feature containers that are not route-level screens may exist when they serve
+  a narrower domain purpose, but route-level screen wrappers belong in
+  `src/app/`.
 - Presentational feature components receive plain props and must not import API
   functions or TanStack Query hooks.
 

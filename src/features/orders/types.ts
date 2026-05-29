@@ -14,19 +14,6 @@ export type OrdersInstrument = {
   lastPrice: number
 }
 
-export type OrdersFormState = {
-  side: OrderSide
-  type: OrderType
-  quantityMode: OrderQuantityMode
-  quantityText: string
-  amountText: string
-  limitPriceText: string
-}
-
-export type OrdersFieldErrors = Partial<
-  Record<"quantityText" | "amountText" | "limitPriceText", string>
->
-
 export type CreateOrderPayload = {
   instrument_id: number
   side: OrderSide

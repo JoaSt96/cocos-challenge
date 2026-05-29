@@ -54,6 +54,14 @@ module.exports = defineConfig([
               position: "before",
             },
             {
+              pattern: "**/*.css",
+              group: "external",
+              position: "before",
+              patternOptions: {
+                matchBase: true,
+              },
+            },
+            {
               pattern: "@/**",
               group: "internal",
             },
@@ -68,7 +76,10 @@ module.exports = defineConfig([
             },
           ],
           pathGroupsExcludedImportTypes: [ "react", "react-native" ],
-          "newlines-between": "always",
+          // Side-effect CSS imports (e.g. ../global.css) cannot be reordered by
+          // --fix when sandwiched between bound imports; allow intra-group
+          // newlines so save-time ESLint fixes still apply elsewhere.
+          "newlines-between": "always-and-inside-groups",
           alphabetize: {
             order: "asc",
             caseInsensitive: true,

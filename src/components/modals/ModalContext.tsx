@@ -17,6 +17,10 @@ import {
 import {Easing} from "react-native-reanimated"
 
 import {BottomSheetContainer} from "./BottomSheetContainer"
+import {
+  getBottomSheetBackgroundStyle,
+  getBottomSheetHandleIndicatorStyle,
+} from "./bottomSheetTheme"
 
 type ModalContextType = {
   hideModal: () => Promise<void>
@@ -100,6 +104,7 @@ export const ModalProvider = ({children}: PropsWithChildren) => {
       {...props}
       disappearsOnIndex={-1}
       appearsOnIndex={0}
+      opacity={0.65}
       pressBehavior={isDismissable ? "close" : "none"}
     />
   )
@@ -111,8 +116,10 @@ export const ModalProvider = ({children}: PropsWithChildren) => {
         ref={bottomSheetRef}
         index={0}
         backdropComponent={renderBackdrop}
+        backgroundStyle={getBottomSheetBackgroundStyle()}
         enableDismissOnClose={isDismissable}
         enablePanDownToClose={isDismissable}
+        handleIndicatorStyle={getBottomSheetHandleIndicatorStyle()}
         onDismiss={handleDismiss}
         animationConfigs={{
           ...timingConfig,

@@ -11,6 +11,20 @@ const portfolioQuantityFormatter = new Intl.NumberFormat("es-AR", {
 export const formatPortfolioPeso = (amount: number) =>
   portfolioPesoFormatter.format(amount)
 
+export const formatPortfolioSignedPeso = (amount: number) => {
+  const formatted = formatPortfolioPeso(Math.abs(amount))
+
+  if (amount > 0) {
+    return `+${formatted}`
+  }
+
+  if (amount < 0) {
+    return `-${formatted}`
+  }
+
+  return formatted
+}
+
 export const formatPortfolioPercent = (ratio: number) =>
   `${ratio > 0 ? "+" : ""}${(ratio * 100).toFixed(2)}%`
 

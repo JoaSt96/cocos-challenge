@@ -1,9 +1,6 @@
-import type {
-  CreateOrderPayload,
-  OrdersFieldErrors,
-  OrdersFormState,
-  OrdersInstrument,
-} from "./types"
+import {z} from "zod"
+
+import type {CreateOrderPayload, OrdersInstrument} from "./types"
 
 type OrdersInstrumentLike = {
   id: number
@@ -14,16 +11,31 @@ type OrdersInstrumentLike = {
 }
 
 type BuildCreateOrderPayloadArgs = {
-  formState: OrdersFormState
+  formValues: OrdersFormValues
   instrument: OrdersInstrument
 }
 
-type BuildCreateOrderPayloadResult = {
-  fieldErrors: OrdersFieldErrors
-  payload: CreateOrderPayload | null
+type GetOrdersEstimatedTotalArgs = BuildCreateOrderPayloadArgs & {
+  computedQuantity: number
 }
 
-export const DEFAULT_ORDERS_FORM_STATE: OrdersFormState = {
+type CreateOrderPayloadFromFormValuesArgs = {
+  instrument: OrdersInstrument
+  values: OrdersFormValues
+}
+
+const ordersFormBaseSchema = z.object({
+  amountText: z.string(),
+  limitPriceText: z.string(),
+  quantityMode: z.enum(["SHARES", "ARS"]),
+  quantityText: z.string(),
+  side: z.enum(["BUY", "SELL"]),
+  type: z.enum(["MARKET", "LIMIT"]),
+})
+
+export type OrdersFormValues = z.infer<typeof ordersFormBaseSchema>
+
+export const DEFAULT_ORDERS_FORM_STATE: OrdersFormValues = {
   amountText: "",
   limitPriceText: "",
   quantityMode: "SHARES",
@@ -56,12 +68,76 @@ export const parseOrdersNumber = (value: string): number | null => {
   return parsed
 }
 
+export const createOrdersFormSchema = (instrument: OrdersInstrument) =>
+  ordersFormBaseSchema.superRefine((values, context) => {
+    const quantity = getOrdersComputedQuantity({
+      formValues: values,
+      instrument,
+    })
+
+    if (values.quantityMode === "SHARES") {
+      const parsedQuantity = parseOrdersNumber(values.quantityText)
+      if (!parsedQuantity) {
+        context.addIssue({
+          code: "custom",
+          message: "Ingresá una cantidad de acciones.",
+          path: ["quantityText"],
+        })
+      } else if (!Number.isInteger(parsedQuantity)) {
+        context.addIssue({
+          code: "custom",
+          message: "Ingresá una cantidad entera de acciones.",
+          path: ["quantityText"],
+        })
+      }
+    }
+
+    if (values.quantityMode === "ARS") {
+      const parsedAmount = parseOrdersNumber(values.amountText)
+      if (!parsedAmount) {
+        context.addIssue({
+          code: "custom",
+          message: "Ingresá un monto en pesos mayor a cero.",
+          path: ["amountText"],
+        })
+      } else if (quantity < 1) {
+        context.addIssue({
+          code: "custom",
+          message: "El monto no alcanza para comprar una acción.",
+          path: ["amountText"],
+        })
+      }
+    }
+
+    const limitPrice =
+      values.type === "LIMIT" ? parseOrdersNumber(values.limitPriceText) : null
+
+    if (values.type === "LIMIT" && !limitPrice) {
+      context.addIssue({
+        code: "custom",
+        message: "Ingresá un precio límite mayor a cero.",
+        path: ["limitPriceText"],
+      })
+    }
+
+    if (quantity < 1 && values.quantityMode === "SHARES") {
+      const parsedQuantity = parseOrdersNumber(values.quantityText)
+      if (parsedQuantity && Number.isInteger(parsedQuantity)) {
+        context.addIssue({
+          code: "custom",
+          message: "La orden debe enviar al menos una acción.",
+          path: ["quantityText"],
+        })
+      }
+    }
+  })
+
 export const getOrdersComputedQuantity = ({
-  formState,
+  formValues,
   instrument,
 }: BuildCreateOrderPayloadArgs): number => {
-  if (formState.quantityMode === "ARS") {
-    const amount = parseOrdersNumber(formState.amountText)
+  if (formValues.quantityMode === "ARS") {
+    const amount = parseOrdersNumber(formValues.amountText)
     if (!amount || instrument.lastPrice <= 0) {
       return 0
     }
@@ -69,7 +145,7 @@ export const getOrdersComputedQuantity = ({
     return Math.floor(amount / instrument.lastPrice)
   }
 
-  const quantity = parseOrdersNumber(formState.quantityText)
+  const quantity = parseOrdersNumber(formValues.quantityText)
   if (!quantity || !Number.isInteger(quantity)) {
     return 0
   }
@@ -77,59 +153,37 @@ export const getOrdersComputedQuantity = ({
   return quantity
 }
 
-export const buildCreateOrderPayload = ({
-  formState,
+export const getOrdersEstimatedTotal = ({
+  computedQuantity,
+  formValues,
   instrument,
-}: BuildCreateOrderPayloadArgs): BuildCreateOrderPayloadResult => {
-  const fieldErrors: OrdersFieldErrors = {}
-  const quantity = getOrdersComputedQuantity({formState, instrument})
+}: GetOrdersEstimatedTotalArgs): number | null => {
+  const price =
+    formValues.type === "LIMIT"
+      ? parseOrdersNumber(formValues.limitPriceText)
+      : instrument.lastPrice
 
-  if (formState.quantityMode === "SHARES") {
-    const parsedQuantity = parseOrdersNumber(formState.quantityText)
-    if (!parsedQuantity) {
-      fieldErrors.quantityText = "Ingresá una cantidad de acciones."
-    } else if (!Number.isInteger(parsedQuantity)) {
-      fieldErrors.quantityText = "Ingresá una cantidad entera de acciones."
-    }
+  if (!price || computedQuantity <= 0) {
+    return null
   }
 
-  if (formState.quantityMode === "ARS") {
-    const parsedAmount = parseOrdersNumber(formState.amountText)
-    if (!parsedAmount) {
-      fieldErrors.amountText = "Ingresá un monto en pesos mayor a cero."
-    } else if (quantity < 1) {
-      fieldErrors.amountText = "El monto no alcanza para comprar una acción."
-    }
-  }
+  const total = price * computedQuantity
+  return Number.isFinite(total) ? total : null
+}
 
+export const createOrderPayloadFromFormValues = ({
+  values,
+  instrument,
+}: CreateOrderPayloadFromFormValuesArgs): CreateOrderPayload => {
+  const quantity = getOrdersComputedQuantity({formValues: values, instrument})
   const limitPrice =
-    formState.type === "LIMIT"
-      ? parseOrdersNumber(formState.limitPriceText)
-      : null
-
-  if (formState.type === "LIMIT" && !limitPrice) {
-    fieldErrors.limitPriceText = "Ingresá un precio límite mayor a cero."
-  }
-
-  if (quantity < 1 && Object.keys(fieldErrors).length === 0) {
-    fieldErrors.quantityText = "La orden debe enviar al menos una acción."
-  }
-
-  if (Object.keys(fieldErrors).length > 0) {
-    return {
-      fieldErrors,
-      payload: null,
-    }
-  }
+    values.type === "LIMIT" ? parseOrdersNumber(values.limitPriceText) : null
 
   return {
-    fieldErrors,
-    payload: {
-      instrument_id: instrument.id,
-      ...(formState.type === "LIMIT" ? {price: limitPrice ?? undefined} : {}),
-      quantity,
-      side: formState.side,
-      type: formState.type,
-    },
+    instrument_id: instrument.id,
+    ...(values.type === "LIMIT" ? {price: limitPrice ?? undefined} : {}),
+    quantity,
+    side: values.side,
+    type: values.type,
   }
 }

@@ -15,18 +15,24 @@ mutation, hook, screen, and feature-local helper.
   - `api/` for raw HTTP calls.
   - `queries/` for TanStack Query keys and query option factories.
   - `hooks/` for UI-facing query and mutation hooks.
-  - `components/` for feature-specific screens, containers, and proxy components.
+  - `components/` for feature-specific presentational components, containers
+    that are not route-level screens, and proxy components.
   - feature-local helpers/types when they are not shared across features.
 - Before copying any pattern from `src/features/home-example/`, verify imports and
   package availability against the live repo. Some files in that folder may
   reference packages or components that are not installed in this project.
 
-## Screen and data boundary
+## Route and data boundary
 
-- Route files in `src/app/` should only compose routing/layout and render a
-  feature screen component.
-- Feature screen/container components are responsible for loading TanStack Query
-  hooks and wiring callbacks.
+- Route files in `src/app/` own screen/container composition for their route.
+- Route files may load TanStack Query hooks through
+  `src/features/<feature>/hooks/`, derive route-local state, and wire navigation
+  callbacks.
+- Do not create repo-owned components, files, or exports named `Screen` or
+  ending in `Screen`.
+- Feature containers that are not route-level screens may exist when they serve
+  a narrower domain purpose, but route-level screen wrappers belong in
+  `src/app/`.
 - Presentational feature components receive plain props: data, loading state,
   error state, selected values, and handlers.
 - Presentational feature components must not import API functions or TanStack

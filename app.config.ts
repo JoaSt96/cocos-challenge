@@ -5,7 +5,7 @@ export default ({config}: ConfigContext): ExpoConfig => ({
   name: "Cocos Challenge",
   slug: "cocos-challenge",
   scheme: "coquito-challenge",
-  userInterfaceStyle: "automatic",
+  userInterfaceStyle: "dark",
   orientation: "default",
   web: {
     output: "static",
