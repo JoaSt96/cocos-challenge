@@ -93,7 +93,7 @@ export default function MarketsInstrumentDetailRoute() {
         <ScrollView
           insetBottom
           insetTop
-          contentContainerClassName="gap-xl px-street pb-safe"
+          contentContainerClassName="gap-xl px-street pb-safe pt-safe"
           keyboardShouldPersistTaps="handled"
           showsVerticalScrollIndicator={false}
         >

@@ -91,6 +91,7 @@ export const PortfolioPositionDetailMetrics = ({
           <PortfolioReturnBadge
             direction={position.direction}
             gain={position.gain}
+            layout="banner"
             returnRatio={position.returnRatio}
           />
         </View>

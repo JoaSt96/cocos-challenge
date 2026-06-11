@@ -50,12 +50,13 @@
     "zod": "^4.4.3"
   },
   "devDependencies": {
-    "babel-plugin-react-compiler": "^1.0.0",
-    "babel-preset-expo": "~56.0.12",
     "@tanstack/eslint-plugin-query": "^5.100.14",
     "@types/react": "~19.2.14",
     "@typescript-eslint/eslint-plugin": "^8.60.0",
     "@typescript-eslint/parser": "^8.60.0",
+    "babel-plugin-react-compiler": "^1.0.0",
+    "babel-preset-expo": "~56.0.12",
+    "eas-build-cache-provider": "^20.0.0",
     "eslint-config-expo": "~56.0.4",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-import": "^2.32.0",

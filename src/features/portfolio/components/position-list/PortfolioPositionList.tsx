@@ -91,7 +91,7 @@ export const PortfolioPositionList = ({
   return (
     <FlashList
       contentInsetAdjustmentBehavior="automatic"
-      contentContainerClassName="pb-safe"
+      contentContainerClassName="pb-safe android:pt-safe"
       data={positions}
       keyExtractor={position => position.positionId}
       ListEmptyComponent={<PortfolioEmptyState />}

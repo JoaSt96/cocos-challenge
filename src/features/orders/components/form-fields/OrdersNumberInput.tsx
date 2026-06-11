@@ -7,10 +7,18 @@ import {cn} from "@/lib/utils"
 
 import {OrdersFieldError} from "./OrdersFieldError"
 
+import {
+  ordersDecimalInputSchema,
+  ordersIntegerInputSchema,
+} from "../../orderValidation"
+
+type OrdersNumberInputMode = "decimal" | "integer"
+
 type OrdersNumberInputProps = {
   disabled?: boolean
   error?: string
   label: string
+  mode?: OrdersNumberInputMode
   onChangeText: (value: string) => void
   placeholder: string
   useBottomSheetInput?: boolean
@@ -28,12 +36,15 @@ export const OrdersNumberInput = ({
   disabled = false,
   error,
   label,
+  mode = "decimal",
   onChangeText,
   placeholder,
   useBottomSheetInput = false,
   value,
 }: OrdersNumberInputProps) => {
   const InputComponent = useBottomSheetInput ? BottomSheetTextInput : TextInput
+  const inputSchema =
+    mode === "integer" ? ordersIntegerInputSchema : ordersDecimalInputSchema
 
   return (
     <View className="gap-xs">
@@ -42,8 +53,8 @@ export const OrdersNumberInput = ({
         accessibilityLabel={label}
         className={cn(inputClassName, disabled && "opacity-50")}
         editable={!disabled}
-        keyboardType="decimal-pad"
-        onChangeText={onChangeText}
+        keyboardType={mode === "integer" ? "number-pad" : "decimal-pad"}
+        onChangeText={nextValue => onChangeText(inputSchema.parse(nextValue))}
         placeholder={placeholder}
         value={value}
       />

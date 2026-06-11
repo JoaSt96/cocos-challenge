@@ -24,6 +24,24 @@ type CreateOrderPayloadFromFormValuesArgs = {
   values: OrdersFormValues
 }
 
+export const ordersIntegerInputSchema = z
+  .string()
+  .transform(value => value.replace(/[^0-9]/g, ""))
+
+export const ordersDecimalInputSchema = z.string().transform(value => {
+  const cleaned = value.replace(/[^0-9.,]/g, "")
+  const separatorIndex = cleaned.search(/[.,]/)
+
+  if (separatorIndex === -1) {
+    return cleaned
+  }
+
+  const head = cleaned.slice(0, separatorIndex + 1)
+  const tail = cleaned.slice(separatorIndex + 1).replace(/[.,]/g, "")
+
+  return head + tail
+})
+
 const ordersFormBaseSchema = z.object({
   amountText: z.string(),
   limitPriceText: z.string(),

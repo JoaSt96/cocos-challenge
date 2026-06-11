@@ -1,11 +1,17 @@
-import {useState} from "react"
-
+import {zodResolver} from "@hookform/resolvers/zod"
 import {StatusBar} from "expo-status-bar"
+
+import {useForm, useWatch} from "react-hook-form"
 
 import {OrdersTicketSheet} from "@/features/orders/components/ticket/OrdersTicketSheet"
 import {toOrdersInstrument} from "@/features/orders/orderValidation"
 import {SearchResultsView} from "@/features/search/components/results-view/SearchResultsView"
 import {useSearchResultsQuery} from "@/features/search/hooks/useSearchResultsQuery"
+import {
+  DEFAULT_SEARCH_FORM_STATE,
+  searchFormSchema,
+  type SearchFormValues,
+} from "@/features/search/searchFormSchema"
 import type {SearchQueryState, SearchResult} from "@/features/search/types"
 import {useDebounce} from "@/hooks/useDebounce"
 import {useModal} from "@/hooks/useModal"
@@ -51,7 +57,12 @@ const getSearchQueryState = ({
 }
 
 export default function SearchRoute() {
-  const [query, setQuery] = useState("")
+  const form = useForm<SearchFormValues>({
+    defaultValues: DEFAULT_SEARCH_FORM_STATE,
+    mode: "onChange",
+    resolver: zodResolver(searchFormSchema),
+  })
+  const query = useWatch({control: form.control, name: "query"})
   const showOrdersTicket = useModal(OrdersTicketSheet)
   const debouncedValue = useDebounce(query, SEARCH_DEBOUNCE_MS)
 
@@ -74,20 +85,24 @@ export default function SearchRoute() {
     })
   }
 
+  const handleQueryChange = (value: string) => {
+    form.setValue("query", value)
+  }
+
   return (
     <>
       <StatusBar style="light" />
       <SearchResultsView
+        control={form.control}
         debouncedQuery={debouncedValue}
         errorMessage={
           resultsQuery.isError
             ? getSearchErrorMessage(resultsQuery.error)
             : null
         }
-        onQueryChange={setQuery}
+        onQueryChange={handleQueryChange}
         onRefresh={handleRefresh}
         onResultPress={handleResultPress}
-        query={query}
         refreshing={resultsQuery.isRefetching}
         results={results}
         state={state}

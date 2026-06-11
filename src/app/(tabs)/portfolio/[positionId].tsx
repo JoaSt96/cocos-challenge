@@ -107,7 +107,7 @@ export default function PortfolioPositionDetailRoute() {
     <>
       <StatusBar style="light" />
       <ScrollView
-        contentContainerClassName="gap-xl px-street pb-safe"
+        contentContainerClassName="gap-xl px-street pb-safe pt-safe"
         showsVerticalScrollIndicator={false}
       >
         <PortfolioPositionDetailHeader

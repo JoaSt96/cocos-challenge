@@ -7,6 +7,7 @@ export default ({config}: ConfigContext): ExpoConfig => ({
   scheme: "coquito-challenge",
   userInterfaceStyle: "dark",
   orientation: "default",
+  buildCacheProvider: "eas",
   web: {
     output: "static",
   },
@@ -17,6 +18,12 @@ export default ({config}: ConfigContext): ExpoConfig => ({
   ios: {
     bundleIdentifier: "com.joast96.coquitochallenge",
   },
+  extra: {
+    eas: {
+      projectId: "e04dbfdf-7f7a-409b-83e9-31a539018547",
+    },
+  },
+  owner: "joast96",
   experiments: {
     reactCompiler: true,
     typedRoutes: true,

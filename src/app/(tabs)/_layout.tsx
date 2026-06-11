@@ -4,8 +4,8 @@ const tradingTabColors = {
   background: "#07111f",
   defaultIcon: "#64748b",
   defaultLabel: "#9aa7bd",
-  indicator: "#22c55e",
-  ripple: "#22c55e33",
+  indicator: "#2dd4bf26",
+  ripple: "#2dd4bf33",
   selected: "#2dd4bf",
   shadow: "#020617",
 } as const

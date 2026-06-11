@@ -82,7 +82,7 @@ export const MarketsInstrumentList = ({
   return (
     <FlashList
       contentInsetAdjustmentBehavior="automatic"
-      contentContainerClassName="pb-safe"
+      contentContainerClassName="pb-safe android:pt-safe"
       data={instruments}
       ListEmptyComponent={<MarketsEmptyState />}
       keyExtractor={instrument => `${instrument.id}`}

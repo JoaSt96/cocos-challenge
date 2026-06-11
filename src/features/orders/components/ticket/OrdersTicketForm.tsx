@@ -241,6 +241,7 @@ export const OrdersTicketForm = ({
               disabled={isSubmitPending}
               error={fieldErrors.quantityText?.message}
               label="Cantidad de acciones"
+              mode="integer"
               onChangeText={quantityText => {
                 clearSubmitFeedback()
                 field.onChange(quantityText)
@@ -261,6 +262,7 @@ export const OrdersTicketForm = ({
               disabled={isSubmitPending}
               error={fieldErrors.amountText?.message}
               label="Monto en pesos"
+              mode="decimal"
               onChangeText={amountText => {
                 clearSubmitFeedback()
                 field.onChange(amountText)
@@ -283,6 +285,7 @@ export const OrdersTicketForm = ({
               disabled={isSubmitPending}
               error={fieldErrors.limitPriceText?.message}
               label="Precio límite"
+              mode="decimal"
               onChangeText={limitPriceText => {
                 clearSubmitFeedback()
                 field.onChange(limitPriceText)
